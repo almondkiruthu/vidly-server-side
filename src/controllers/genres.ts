@@ -14,3 +14,7 @@ class Node {
     this.next = next;
   }
 }
+
+class List {
+  constructor(next: null, value: number) {}
+}
