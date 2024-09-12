@@ -1,26 +1,26 @@
-import express from 'express';
-import Joi from 'joi';
+import express from "express";
+import Joi from "joi";
 
 const genresRouter = express.Router();
 
 const genres = [
-  { id: 1, name: 'Acton' },
-  { id: 2, name: 'Horror' },
-  { id: 3, name: 'Romance' },
+  { id: 1, name: "Acton" },
+  { id: 2, name: "Horror" },
+  { id: 3, name: "Romance" },
 ];
 
-genresRouter.get('/', (_req, res) => {
+genresRouter.get("/", (_req, res) => {
   res.send(genres);
 });
 
-genresRouter.get('/:id', (req, res) => {
+genresRouter.get("/:id", (req, res) => {
   const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
   if (!genre)
-    return res.status(404).send('The genre with the given ID was not found.');
+    return res.status(404).send("The genre with the given ID was not found.");
   res.send(genre);
 });
 
-genresRouter.post('/', (req, res) => {
+genresRouter.post("/", (req, res) => {
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -32,10 +32,10 @@ genresRouter.post('/', (req, res) => {
   res.send(genre);
 });
 
-genresRouter.put('/:id', (req, res) => {
+genresRouter.put("/:id", (req, res) => {
   const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
   if (!genre)
-    return res.status(404).send('The genre with the given ID was not found.');
+    return res.status(404).send("The genre with the given ID was not found.");
 
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -44,17 +44,17 @@ genresRouter.put('/:id', (req, res) => {
   res.send(genre);
 });
 
-genresRouter.delete('/:id', (req, res) => {
+genresRouter.delete("/:id", (req, res) => {
   const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
   if (!genre)
-    return res.status(404).send('The genre with the given ID was not found.');
+    return res.status(404).send("The genre with the given ID was not found.");
 
   const index = genres.indexOf(genre);
   genres.splice(index, 1);
   res.send(genre);
 });
 
-function validateGenre(genre: { id: string | number; name: string }) {
+function validateGenre(genre) {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
   });
