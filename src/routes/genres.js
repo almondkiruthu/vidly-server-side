@@ -2,7 +2,7 @@ import express from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 
-const genresRouter = express.Router();
+const genres = express.Router();
 
 const genreSchema = new mongoose.Schema({
   name: {
@@ -15,12 +15,12 @@ const genreSchema = new mongoose.Schema({
 
 const Genre = mongoose.model("Genre", genreSchema);
 
-genresRouter.get("/", async (_req, res) => {
+genres.get("/", async (_req, res) => {
   const genres = await Genre.find().sort({ name: "asc" });
   res.send(genres);
 });
 
-genresRouter.post("/", async (req, res) => {
+genres.post("/", async (req, res) => {
   try {
     const { error } = validateGenre(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -35,7 +35,7 @@ genresRouter.post("/", async (req, res) => {
   }
 });
 
-genresRouter.put("/:id", async (req, res) => {
+genres.put("/:id", async (req, res) => {
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -51,7 +51,7 @@ genresRouter.put("/:id", async (req, res) => {
   res.send(genre);
 });
 
-genresRouter.delete("/:id", async (req, res) => {
+genres.delete("/:id", async (req, res) => {
   const genre = await Genre.findByIdAndDelete(req.params.id);
 
   if (!genre)
@@ -60,7 +60,7 @@ genresRouter.delete("/:id", async (req, res) => {
   res.send(genre);
 });
 
-genresRouter.get("/:id", async (req, res) => {
+genres.get("/:id", async (req, res) => {
   const genre = await Genre.findById(req.params.id);
 
   if (!genre)
@@ -77,4 +77,4 @@ function validateGenre(genre) {
   return schema.validate(genre);
 }
 
-export default genresRouter;
+export default genres;

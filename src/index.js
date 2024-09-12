@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 
-import genresRouter from "./routes/genres.js";
+import customers from "./routes/customers.js";
+import genres from "./routes/genres.js";
 
 const app = express();
 
@@ -13,7 +14,8 @@ mongoose
   );
 
 app.use(express.json());
-app.use("/api/genres", genresRouter);
+app.use("/api/genres", genres);
+app.use("/api/customers", customers);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}....`));
