@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
+
 import genresRouter from "./routes/genres.js";
+
 const app = express();
 
 mongoose
@@ -11,7 +13,6 @@ mongoose
   );
 
 app.use(express.json());
-
 app.use("/api/genres", genresRouter);
 
 const port = process.env.PORT || 3000;
