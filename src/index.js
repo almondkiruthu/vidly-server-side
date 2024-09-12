@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import genresRouter from "./routes/genres";
+import genresRouter from "./routes/genres.js";
 const app = express();
 
 mongoose
