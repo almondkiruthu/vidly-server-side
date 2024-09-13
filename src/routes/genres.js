@@ -1,19 +1,7 @@
 import express from "express";
-import Joi from "joi";
-import mongoose from "mongoose";
+import { Genre, validateGenre } from "../models/genres.js";
 
 const genres = express.Router();
-
-const genreSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: 5,
-    maxLength: 50,
-  },
-});
-
-const Genre = mongoose.model("Genre", genreSchema);
 
 genres.get("/", async (_req, res) => {
   const genres = await Genre.find().sort({ name: "asc" });
@@ -68,13 +56,5 @@ genres.get("/:id", async (req, res) => {
 
   res.send(genre);
 });
-
-function validateGenre(genre) {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-
-  return schema.validate(genre);
-}
 
 export default genres;

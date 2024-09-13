@@ -1,31 +1,9 @@
 import express from "express";
-import Joi from "joi";
-import mongoose from "mongoose";
+import { Customer, validateCustomer } from "../models/customers.js";
 
 const customers = express.Router();
 
-const customerSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: 5,
-    maxLength: 50,
-  },
-  isGold: {
-    type: Boolean,
-    default: false,
-  },
-  phone: {
-    type: String,
-    required: true,
-    minLength: 5,
-    maxLength: 50,
-  },
-});
-
-const Customer = mongoose.model("Customer", customerSchema);
-
-customers.get("/", async (req, res) => {
+customers.get("/", async (_req, res) => {
   const customers = await Customer.find().sort({ name: "asc" });
   res.send(customers);
 });
@@ -88,15 +66,5 @@ customers.get("/:id", async (req, res) => {
 
   res.send(customer);
 });
-
-function validateCustomer(customer) {
-  const schema = Joi.object({
-    name: Joi.string().min(5).max(50).required(),
-    phone: Joi.string().min(5).max(50).required(),
-    isGold: Joi.boolean(),
-  });
-
-  return schema.validate(customer);
-}
 
 export default customers;
