@@ -2,7 +2,7 @@ import Joi from "joi";
 import mongoose from "mongoose";
 import { genreSchema } from "./genres.js";
 
-const movieSchema = new mongoose.Schema({
+export const movieSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
