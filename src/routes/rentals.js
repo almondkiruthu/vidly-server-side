@@ -38,12 +38,27 @@ rentals.post("/", async (req, res) => {
       dailyRentalRate: movie.dailyRentalRate,
     },
   });
-  rental = await rental.save();
 
-  movie.numberInStock--;
-  movie.save();
+  async function addRental() {
+    const session = await mongoose.startSession();
 
-  res.send(rental);
+    session.startTransaction();
+    try {
+      await rental.save({ session });
+      await movie.updateOne({ $inc: { numberInStock: -1 } }, { session });
+      await session.commitTransaction();
+      session.endSession();
+      console.log("Rental saved");
+      res.send(rental);
+    } catch (err) {
+      await session.abortTransaction();
+      session.endSession();
+      console.log(err.message)
+      return res.status(500).send("Something went wrong");
+    }
+  }
+
+  addRental();
 });
 
 rentals.get("/:id", async (req, res) => {
